@@ -1,30 +1,17 @@
-import React, { ComponentType } from "react";
+import React from "react";
 import Head from "next/head";
-import dynamic from "next/dynamic";
-import { ComponentInstance, RootComponentInstance } from "@uniformdev/canvas";
+import { RootComponentInstance } from "@uniformdev/canvas";
 import {
-  ComponentProps,
   Composition,
-  DefaultNotImplementedComponent,
   Slot,
   createApiEnhancer,
   useCompositionInstance,
 } from "@uniformdev/canvas-react";
 import { ToggleEmbeddedContextDevTools } from "@uniformdev/context-devtools";
 
-import Hero from "./Hero";
 import Navigation, { NavLink } from "./Navigation";
 import Footer from "./Footer";
-
-// register your new components here
-export function componentResolver(
-  component: ComponentInstance
-): ComponentType<ComponentProps<any>> | null {
-  if (component.type == "hero") {
-    return Hero;
-  }
-  return DefaultNotImplementedComponent;
-}
+import '../lib/uniform/components';
 
 export default function PageComposition({
   composition,
@@ -55,7 +42,6 @@ export default function PageComposition({
         {compositionInstance && (
           <Composition
             data={compositionInstance}
-            resolveRenderer={componentResolver}
           >
             <Slot name="content" />
           </Composition>
