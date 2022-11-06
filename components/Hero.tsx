@@ -1,4 +1,4 @@
-import { ComponentProps } from "@uniformdev/canvas-react";
+import { ComponentProps, registerUniformComponent } from "@uniformdev/canvas-react";
 
 type HeroProps = ComponentProps<{
   title: string;
@@ -15,4 +15,7 @@ const Hero: React.FC<HeroProps> = ({ title, description }: HeroProps) => (
   </>
 );
 
-export default Hero;
+registerUniformComponent({
+  type: 'hero',
+  component: Hero
+});
