@@ -1,6 +1,5 @@
 id: page
 name: Page
-permissions: []
 icon: file-document
 parameters:
   - id: metaTitle
@@ -24,7 +23,6 @@ slugSettings:
   required: 'yes'
   regularExpression: ''
   regularExpressionMessage: ''
-titleParameter: ''
 canBeComposition: true
-created: '2022-07-28T02:12:08.542362+00:00'
-updated: '2022-07-28T03:55:11.629983+00:00'
+created: '2022-11-07T04:30:00.880883+00:00'
+updated: '2022-11-07T04:30:00.880883+00:00'

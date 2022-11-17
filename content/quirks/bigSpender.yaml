@@ -1,0 +1,8 @@
+id: bigSpender
+name: Big Spender
+description: ''
+options:
+  - name: 'true'
+    value: 'true'
+  - name: 'false'
+    value: 'false'
