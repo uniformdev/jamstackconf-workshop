@@ -2,10 +2,12 @@ import manifest from "../../lib/uniform/contextManifest.json" assert { type: "js
 import {
   createEdgeContext,
   createUniformEdgeHandler,
-  //buildNetlifyQuirks,
+  buildNetlifyQuirks,
 } from "../../lib/uniform/index.deno.js";
+// @ts-ignore
+import type { Context } from "netlify:edge";
 
-export default async (request, netlifyContext) => {
+export default async (request: Request, netlifyContext: Context) => {
   // ignoring requests that are not pages
   if (!shouldProcess) {
     return await netlifyContext.next({ sendConditionalRequest: true });
@@ -18,8 +20,8 @@ export default async (request, netlifyContext) => {
   const originResponse = await netlifyContext.next();
   const handler = createUniformEdgeHandler();
   const quirks = {
-    // ...buildNetlifyQuirks(netlifyContext),
-    //...(await getCDPData(netlifyContext)),
+    ...buildNetlifyQuirks(netlifyContext),
+    ...(await getCDPData(netlifyContext)),
   };
   console.log({ quirks });
   const { processed, response } = await handler({
@@ -43,24 +45,24 @@ export default async (request, netlifyContext) => {
   });
 };
 
-// async function getCDPData(netlifyContext) {
-//   const vid = netlifyContext.cookies.get("vid");
-//   console.log({ visitorId: vid });
-//   if (!vid) {
-//     return {};
-//   }
-//   const visitorResponse = await fetch(
-//     `https://cdpmock.netlify.app/profile/v1/spaces/space_1/collections/users/profiles/user_id:${vid}/traits`
-//   );
-//   if (!visitorResponse.ok) {
-//     console.log("Error fetching CDP data");
-//   }
-//   const visitorData = await visitorResponse.json();
-//   console.log({ visitorData });
-//   return visitorData?.traits;
-// }
+async function getCDPData(netlifyContext: Context) {
+  const vid = netlifyContext.cookies.get("vid");
+  console.log({ visitorId: vid });
+  if (!vid) {
+    return {};
+  }
+  const visitorResponse = await fetch(
+    `https://cdpmock.netlify.app/profile/v1/spaces/space_1/collections/users/profiles/user_id:${vid}/traits`
+  );
+  if (!visitorResponse.ok) {
+    console.log("Error fetching CDP data");
+  }
+  const visitorData = await visitorResponse.json();
+  console.log({ visitorData });
+  return visitorData?.traits;
+}
 
-function shouldProcess(request) {
+function shouldProcess(request: Request) {
   const IGNORED_PATHS = /\/.*\.(ico|png|jpg|jpeg|svg|css|js|json)(?:\?.*|$)$/g;
   return (
     request.method.toUpperCase() === "GET" || !request.url.match(IGNORED_PATHS)
