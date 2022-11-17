@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import { RootComponentInstance } from "@uniformdev/canvas";
 import {
   Composition,
@@ -7,11 +8,13 @@ import {
   createApiEnhancer,
   useCompositionInstance,
 } from "@uniformdev/canvas-react";
-import { ToggleEmbeddedContextDevTools } from "@uniformdev/context-devtools";
-
 import Navigation, { NavLink } from "./Navigation";
 import Footer from "./Footer";
-import '../lib/uniform/components';
+import "../lib/uniform/components";
+
+const DevTools = dynamic(() => import("./DevTools"), {
+  ssr: false,
+});
 
 export default function PageComposition({
   composition,
@@ -37,18 +40,14 @@ export default function PageComposition({
       <Head>
         <title>{title}</title>
       </Head>
-      <>
-        <Navigation navLinks={navLinks} />
-        {compositionInstance && (
-          <Composition
-            data={compositionInstance}
-          >
-            <Slot name="content" />
-          </Composition>
-        )}
-        <Footer />
-      </>
-      <ToggleEmbeddedContextDevTools />
+      <Navigation navLinks={navLinks} />
+      {compositionInstance && (
+        <Composition data={compositionInstance}>
+          <Slot name="content" />
+        </Composition>
+      )}
+      <Footer />
+      <DevTools />
     </>
   );
 }
