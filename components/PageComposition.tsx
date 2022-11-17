@@ -1,6 +1,5 @@
 import React from "react";
 import Head from "next/head";
-import dynamic from "next/dynamic";
 import { RootComponentInstance } from "@uniformdev/canvas";
 import {
   Composition,
@@ -11,10 +10,6 @@ import {
 import Navigation, { NavLink } from "./Navigation";
 import Footer from "./Footer";
 import "../lib/uniform/components";
-
-const DevTools = dynamic(() => import("./DevTools"), {
-  ssr: false,
-});
 
 export default function PageComposition({
   composition,
@@ -47,7 +42,6 @@ export default function PageComposition({
         </Composition>
       )}
       <Footer />
-      <DevTools />
     </>
   );
 }
