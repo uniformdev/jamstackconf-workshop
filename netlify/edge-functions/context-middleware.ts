@@ -4,7 +4,7 @@ import {
   createUniformEdgeHandler,
   buildNetlifyQuirks,
 } from "../../lib/uniform/index.deno.js";
-// @ts-ignore
+// @ts-ignore: deno imports failing next build
 import type { Context } from "netlify:edge";
 
 export default async (request: Request, netlifyContext: Context) => {
@@ -38,9 +38,10 @@ export default async (request: Request, netlifyContext: Context) => {
   return new Response(response.body, {
     ...response,
     headers: {
-      ...response.headers,
-      "Cache-Control": "no-store, must-revalidate",
-      Expires: "0",
+      // ...response.headers, Symbol cannot be destructured
+      'Cache-Control': 'no-store, must-revalidate',
+      'Content-Type': 'text/html; charset=utf-8', // To apply automatic deno compression, more info https://deno.com/deploy/docs/compression
+      Expires: '0',
     },
   });
 };
