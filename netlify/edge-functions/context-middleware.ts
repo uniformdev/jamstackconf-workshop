@@ -39,28 +39,39 @@ export default async (request: Request, netlifyContext: Context) => {
     ...response,
     headers: {
       // ...response.headers, Symbol cannot be destructured
-      'Cache-Control': 'no-store, must-revalidate',
-      'Content-Type': 'text/html; charset=utf-8', // To apply automatic deno compression, more info https://deno.com/deploy/docs/compression
-      Expires: '0',
+      "Cache-Control": "no-store, must-revalidate",
+      "Content-Type": "text/html; charset=utf-8", // To apply automatic deno compression, more info https://deno.com/deploy/docs/compression
+      Expires: "0",
     },
   });
 };
 
 async function getCDPData(netlifyContext: Context) {
-  const vid = netlifyContext.cookies.get("vid");
-  console.log({ visitorId: vid });
-  if (!vid) {
+  const ajs_anonymous_id = netlifyContext.cookies.get("ajs_anonymous_id");
+  console.log({ visitorId: ajs_anonymous_id });
+  if (!ajs_anonymous_id) {
     return {};
   }
-  const visitorResponse = await fetch(
-    `https://cdpmock.netlify.app/profile/v1/spaces/space_1/collections/users/profiles/user_id:${vid}/traits`
-  );
+
+  // @ts-ignore: deno imports failing next build
+  const segmentSpaceId = Deno.env.get("SEGMENT_SPACE_ID");
+  // @ts-ignore: deno imports failing next build
+  const segmentBasicAuth = Deno.env.get("SEGMENT_BASIC_AUTH");
+
+  const url = `https://profiles.segment.com/v1/spaces/${segmentSpaceId}/collections/users/profiles/anonymous_id:${ajs_anonymous_id}/traits`;
+
+  const visitorResponse = await fetch(url, {
+    headers: {
+      Authorization: `Basic ${segmentBasicAuth}`,
+    },
+  });
   if (!visitorResponse.ok) {
     console.log("Error fetching CDP data");
   }
   const visitorData = await visitorResponse.json();
-  console.log({ visitorData });
-  return visitorData?.traits;
+  const traits = removeUndersCores(visitorData?.traits);
+  console.log({ traits });
+  return traits;
 }
 
 function shouldProcess(request: Request) {
@@ -68,4 +79,11 @@ function shouldProcess(request: Request) {
   return (
     request.method.toUpperCase() === "GET" || !request.url.match(IGNORED_PATHS)
   );
+}
+
+function removeUndersCores(obj: any) {
+  return Object.keys(obj).reduce((accumulator: any, key) => {
+    accumulator[key.replaceAll("_", "")] = obj[key];
+    return accumulator;
+  }, {});
 }

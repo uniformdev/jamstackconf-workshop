@@ -28,6 +28,7 @@ class MyDocument extends Document<CustomDocumentProps> {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <body>
+          
           <main className="main">
             <Main />
           </main>

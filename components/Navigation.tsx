@@ -15,14 +15,20 @@ const Navigation: React.FC<NavigationProps> = ({
   if (!navLinks) {
     return null;
   }
+
+  const links = [...navLinks];
+  links.push({ url: "/simulator", title: "Simulator" });
+  links.push({ url: "/profile", title: "Profile" });
+  links.push({ url: "/identify", title: "Identify" });
+
   return (
     <div className="navigation">
-      {navLinks.map((e: NavLink, i: number) => (
+      {links.map((e: NavLink, i: number) => (
         <span key={i}>
           <Link href={e.url}>{e.title}</Link>
         </span>
       ))}
-      {navLinks.length <= 1 ? (
+      {links.length <= 1 ? (
         <span className="note">
           (create a new composition to see a link to it here...)
         </span>

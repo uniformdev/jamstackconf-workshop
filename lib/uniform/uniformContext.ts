@@ -8,6 +8,7 @@ import {
 import { NextCookieTransitionDataStore } from "@uniformdev/context-next";
 import { NextPageContext } from "next";
 import manifest from "./contextManifest.json";
+import { enableSegmentAnalytics } from "./segment";
 
 export default function createUniformContext(
   serverContext?: NextPageContext
@@ -15,6 +16,7 @@ export default function createUniformContext(
   const plugins: ContextPlugin[] = [
     enableContextDevTools(),
     enableDebugConsoleLogDrain("debug"),
+    enableSegmentAnalytics(),
   ];
   const context = new Context({
     defaultConsent: true,
