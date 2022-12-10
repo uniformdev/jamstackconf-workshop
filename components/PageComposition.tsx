@@ -9,7 +9,8 @@ import {
 } from "@uniformdev/canvas-react";
 import Navigation, { NavLink } from "./Navigation";
 import Footer from "./Footer";
-import "../lib/uniform/components";
+
+import './components';
 
 export default function PageComposition({
   composition,
