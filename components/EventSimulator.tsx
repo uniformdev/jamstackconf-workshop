@@ -1,8 +1,8 @@
-import React from "react";
-import { useUniformContext } from "@uniformdev/context-react";
+import React, { useState } from "react";
 
 const EventSimulator = () => {
-  const { context } = useUniformContext();
+  const [message, setMessage] = useState<string>("Simulate an event using one of the buttons below:");
+
   const onOrderComplete = (e) => {
     e.preventDefault();
     global.analytics.track("Order Completed", {
@@ -10,6 +10,7 @@ const EventSimulator = () => {
       amount: "10000",
       category: "Coffee Machines",
     });
+    setMessage("'Order Completed' event dispatched (amount: 10000)");
   };
   const onProductFavorite = (e) => {
     e.preventDefault();
@@ -17,17 +18,14 @@ const EventSimulator = () => {
       product: "456",
       category: "Beans",
     });
+    setMessage("'Product Favorited' event dispatched");
   };
 
-  const onForgetMe = async (e) => {
-    e.preventDefault();
-    await context.forget(true);
-  };
   return (
     <div>
+      <h1>{message}</h1>
       <button onClick={onProductFavorite}>Favorite Product</button>
       <button onClick={onOrderComplete}>Complete Order</button>
-      <button onClick={onForgetMe}>Forget Me</button>
     </div>
   );
 };

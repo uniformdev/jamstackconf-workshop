@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useScores } from "@uniformdev/context-react";
 import { useCookies } from "react-cookie";
 import Traits from "./Traits";
 
 const Identify = () => {
-  let scores = useScores();
-
+  const scores = useScores();
   const [username, userInput] = useInput({ type: "text" });
   const [cookies] = useCookies();
 

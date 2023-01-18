@@ -65,11 +65,13 @@ async function getCDPData(netlifyContext: Context) {
       Authorization: `Basic ${segmentBasicAuth}`,
     },
   });
+  console.log({ visitorResponse });
   if (!visitorResponse.ok) {
     console.log("Error fetching CDP data");
+    return {};
   }
   const visitorData = await visitorResponse.json();
-  const traits = removeUndersCores(visitorData?.traits);
+  const traits = removeUnderscores(visitorData?.traits);
   console.log({ traits });
   return traits;
 }
@@ -81,7 +83,7 @@ function shouldProcess(request: Request) {
   );
 }
 
-function removeUndersCores(obj: any) {
+function removeUnderscores(obj: any) {
   return Object.keys(obj).reduce((accumulator: any, key) => {
     accumulator[key.replaceAll("_", "")] = obj[key];
     return accumulator;

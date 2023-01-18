@@ -1,5 +1,5 @@
-id: bigSpender
-name: Big Spender
+id: bigspenders
+name: Big Spenders
 description: ''
 options:
   - name: 'true'
