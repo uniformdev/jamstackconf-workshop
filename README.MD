@@ -1,5 +1,7 @@
 # Uniform + Netlify edge-side personalization starter
 
+⚠️ The repo deprecated, moved [here](https://github.com/uniformdev/examples/tree/main/examples/segment-netlify-edge-personalization).
+
 ## Pre-requisites
 
 1. Netlify account (start for free [here](https://app.netlify.com/signup)).
